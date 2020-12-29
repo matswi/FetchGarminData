@@ -11,7 +11,7 @@ $login = New-GarminConnectLogin -Credential $credential
 
 if ($login) {
 
-    $sleepData = Get-GarminSleepData -UserDisplayName $config.DisplayName -Date "2020-12-28"
+    $sleepData = Get-GarminSleepData -UserDisplayName $config.DisplayName
 
     if ($sleepData.dailySleepDTO.lightSleepSeconds -gt 0) {
         
