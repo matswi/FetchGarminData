@@ -2,6 +2,7 @@ import-module GarminConnect -Force
 
 $config = Get-Content .\Configuration.json -Raw | ConvertFrom-Json
 
+$influxDbUri = $config.InfluxDbUri
 
 $password = $config.Password | ConvertTo-SecureString -AsPlainText -Force
 
@@ -34,7 +35,7 @@ if ($login) {
             
             $value = $sleep.$metric
 
-            Invoke-RestMethod -Uri 'http://localhost:8086/write?db=garmin' -Method POST -Body "$metric,UserProfile=$userProfile value=$value $timeStamp"
+            Invoke-RestMethod -Uri $influxDbUri -Method POST -Body "$metric,UserProfile=$userProfile value=$value $timeStamp"
         }
     }
 }
