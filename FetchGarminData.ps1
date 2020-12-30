@@ -28,22 +28,33 @@ while ($true) {
                 [datetime]$date = $sleepData.dailySleepDTO.calendarDate
                 $timeStamp = [long]((New-TimeSpan -Start (Get-Date -Date '1970-01-01') -End (($Date).ToUniversalTime())).TotalSeconds * 1E9)
 
-                $userProfile = $sleepData.dailySleepDTO.userProfilePK
+                # Need to check if the result is already in the database
+                $dbQuery = "SELECT * FROM LightSleepSeconds WHERE time = $timeStamp"
+                $queryResult = (Invoke-RestMethod -Uri "$influxDbUri&q=$dbQuery").results.series
 
-                $sleep = @{
-                    SleepTimeSeconds = $sleepData.dailySleepDTO.sleepTimeSeconds
-                    UnmeasurableSleepSeconds = $sleepData.dailySleepDTO.unmeasurableSleepSeconds
-                    DeepSleepSeconds = $sleepData.dailySleepDTO.deepSleepSeconds
-                    LightSleepSeconds = $sleepData.dailySleepDTO.lightSleepSeconds
-                    REMSleepSeconds = $sleepData.dailySleepDTO.remSleepSeconds
-                    AwakeSleepSeconds = $sleepData.dailySleepDTO.awakeSleepSeconds
+                if (-not $queryResult) {
+
+                    $userProfile = $sleepData.dailySleepDTO.userProfilePK
+
+                    $sleep = @{
+                        SleepTimeSeconds = $sleepData.dailySleepDTO.sleepTimeSeconds
+                        UnmeasurableSleepSeconds = $sleepData.dailySleepDTO.unmeasurableSleepSeconds
+                        DeepSleepSeconds = $sleepData.dailySleepDTO.deepSleepSeconds
+                        LightSleepSeconds = $sleepData.dailySleepDTO.lightSleepSeconds
+                        REMSleepSeconds = $sleepData.dailySleepDTO.remSleepSeconds
+                        AwakeSleepSeconds = $sleepData.dailySleepDTO.awakeSleepSeconds
+                    }
+
+                    foreach ($metric in $sleep.Keys) {
+                        
+                        $value = $sleep.$metric
+
+                        Invoke-RestMethod -Uri $influxDbUri -Method POST -Body "$metric,UserProfile=$userProfile value=$value $timeStamp"
+                    }
                 }
 
-                foreach ($metric in $sleep.Keys) {
-                    
-                    $value = $sleep.$metric
-
-                    Invoke-RestMethod -Uri $influxDbUri -Method POST -Body "$metric,UserProfile=$userProfile value=$value $timeStamp"
+                else {
+                    Write-Output "Measurement already in the databas"
                 }
             }
         }
@@ -55,4 +66,3 @@ while ($true) {
     # Main loop every 5 min.
     Start-Sleep -Seconds 300
 }
-
