@@ -1,6 +1,11 @@
+$scriptVersion = "0.0.0.1"
+
 Set-Location $PSScriptRoot
 
 import-module ./GarminConnect/ -Force
+
+$startTime = Get-Date
+$pswhVersion = $PSVersionTable.psversion.ToString()
 
 $config = Get-Content ./Configuration.json -Raw | ConvertFrom-Json
 
@@ -11,6 +16,8 @@ $password = $config.Password | ConvertTo-SecureString -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential -ArgumentList $config.UserName, $password
 
 while ($true) {
+
+    Write-Output "`nMain loop time: $(Get-Date)"
 
     $hour = [int](Get-Date -Format HH)
     # Only run every second hour between 7AM and 10PM
@@ -49,7 +56,7 @@ while ($true) {
                         
                         $value = $sleep.$metric
 
-                        Invoke-RestMethod -Uri $influxDbUri -Method POST -Body "$metric,UserProfile=$userProfile value=$value $timeStamp"
+                        $null = Invoke-RestMethod -Uri $influxDbUri -Method POST -Body "$metric,UserProfile=$userProfile value=$value $timeStamp"
                     }
                 }
 
@@ -59,10 +66,20 @@ while ($true) {
             }
         }
 
+        Write-Output "`nChild loop time: $(Get-Date)"
+        Write-Output "Powershell version: $pswhVersion"
+        Write-Output "Hostname: $(hostname)"
+        Write-Output "Scrip start Time: $startTime"
+        $Duration = ((get-date) - $startTime).TotalHours
+        Write-Output ("Duration: {0:F2} Hours" -f $Duration)
+        Write-Output "Child loop wait: 7200 sec"
+        Write-Output "End loop $(Get-Date)"
+
         Start-Sleep -Seconds 7200
         $hour = [int](Get-Date -Format HH)
     }
 
     # Main loop every 5 min.
+    Write-Output "`nMain loop wait: 300 sec"
     Start-Sleep -Seconds 300
 }
