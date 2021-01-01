@@ -65,10 +65,6 @@ RUN chmod a+x,o-w ${PS_INSTALL_FOLDER}/pwsh \
     # Create the pwsh symbolic link that points to powershell
     && ln -s ${PS_INSTALL_FOLDER}/pwsh /usr/bin/pwsh
 
-# Use PowerShell as the default shell
-# Use array to avoid Docker prepending /bin/sh -c
-CMD [ "pwsh" ]
-
 #RUN \
 #    TZ=Europe/Stockholm \
 #    && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone \
