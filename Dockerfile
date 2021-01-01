@@ -1,4 +1,4 @@
-FROM arm32v7/ubuntu:bionic
+FROM ubuntu:bionic
 
 ENV PS_VERSION=7.0.0-preview.5
 ENV PS_PACKAGE=powershell-${PS_VERSION}-linux-arm32.tar.gz
