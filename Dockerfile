@@ -1,11 +1,24 @@
-#FROM mcr.microsoft.com/powershell:latest
-# Using dotnet sdk, since the powershell image doesent support pi 4?
-FROM mcr.microsoft.com/dotnet/sdk:latest
+FROM arm32v7/ubuntu:bionic
 
-#RUN \
-#    TZ=Europe/Stockholm \
-#    && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone \
-#    && dpkg-reconfigure --frontend noninteractive tzdata
+ENV PS_VERSION=7.0.0-preview.5
+ENV PS_PACKAGE=powershell-${PS_VERSION}-linux-arm32.tar.gz
+ENV PS_PACKAGE_URL=https://github.com/PowerShell/PowerShell/releases/download/v${PS_VERSION}/${PS_PACKAGE}
+ENV WIRINGPI_CODES=1
+
+RUN \
+  apt-get update \
+  && apt-get install --no-install-recommends ca-certificates libunwind8 libssl1.0 libicu60 wget unzip --yes \
+  && wget https://github.com/PowerShell/PowerShell/releases/download/v${PS_VERSION}/${PS_PACKAGE} \
+  && mkdir ~/powershell \
+  && tar -xvf ./${PS_PACKAGE} -C ~/powershell \
+  && ln -s /root/powershell/pwsh /usr/bin/pwsh \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN \
+    TZ=Europe/Stockholm \
+    && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone \
+    && dpkg-reconfigure --frontend noninteractive tzdata
 
 # get script from github
  RUN \
