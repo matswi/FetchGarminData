@@ -1,4 +1,6 @@
-FROM mcr.microsoft.com/powershell:latest
+#FROM mcr.microsoft.com/powershell:latest
+# Using dotnet sdk, since the powershell image doesent support pi 4?
+FROM mcr.microsoft.com/dotnet/sdk:latest
 
 RUN \
     TZ=Europe/Stockholm \
@@ -7,12 +9,12 @@ RUN \
 
 # get script from github
  RUN \
-    WEATHERBOX_VERSION=0.0.13 \
+    FETCHGARMINDATA_VERSION=0.0.0.1 \
     && mkdir -p ~/FetchGarminData \
     && cd ~/FetchGarminData \
     && wget https://github.com/matswi/FetchGarminData/raw/master/FetchGarminData.ps1 \
-    && && mkdir -p ~/weatherbox/GarminConnect \
-    && cd ~/weatherbox/GarminConnect \
+    && && mkdir -p ~/FetchGarminData/GarminConnect \
+    && cd ~/FetchGarminData/GarminConnect \
     && wget https://raw.githubusercontent.com/matswi/GarminConnect/main/GarminConnect/GarminConnect.psd1 \
     && wget https://github.com/matswi/GarminConnect/raw/main/GarminConnect/GarminConnect.psm1
 
