@@ -1,19 +1,5 @@
-FROM ubuntu:bionic
+FROM arm32v7/powershell:latest
 
-ENV PS_VERSION=7.0.0-preview.5
-ENV PS_PACKAGE=powershell-${PS_VERSION}-linux-arm32.tar.gz
-ENV PS_PACKAGE_URL=https://github.com/PowerShell/PowerShell/releases/download/v${PS_VERSION}/${PS_PACKAGE}
-ENV WIRINGPI_CODES=1
-
-RUN \
-  apt-get update \
-  && apt-get install --no-install-recommends ca-certificates libunwind8 libssl1.0 libicu60 wget unzip --yes \
-  && wget https://github.com/PowerShell/PowerShell/releases/download/v${PS_VERSION}/${PS_PACKAGE} \
-  && mkdir ~/powershell \
-  && tar -xvf ./${PS_PACKAGE} -C ~/powershell \
-  && ln -s /root/powershell/pwsh /usr/bin/pwsh \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
 
 #RUN \
 #    TZ=Europe/Stockholm \
@@ -21,15 +7,15 @@ RUN \
 #    && dpkg-reconfigure --frontend noninteractive tzdata
 
 # get script from github
- RUN \
-    FETCHGARMINDATA_VERSION=0.0.0.1 \
-    && mkdir -p ~/FetchGarminData \
-    && cd ~/FetchGarminData \
-    && wget https://github.com/matswi/FetchGarminData/raw/master/FetchGarminData.ps1 \
-    && && mkdir -p ~/FetchGarminData/GarminConnect \
-    && cd ~/FetchGarminData/GarminConnect \
-    && wget https://raw.githubusercontent.com/matswi/GarminConnect/main/GarminConnect/GarminConnect.psd1 \
-    && wget https://github.com/matswi/GarminConnect/raw/main/GarminConnect/GarminConnect.psm1
+#  RUN \
+#     FETCHGARMINDATA_VERSION=0.0.0.1 \
+#     && mkdir -p ~/FetchGarminData \
+#     && cd ~/FetchGarminData \
+#     && wget https://github.com/matswi/FetchGarminData/raw/master/FetchGarminData.ps1 \
+#     && && mkdir -p ~/FetchGarminData/GarminConnect \
+#     && cd ~/FetchGarminData/GarminConnect \
+#     && wget https://raw.githubusercontent.com/matswi/GarminConnect/main/GarminConnect/GarminConnect.psd1 \
+#     && wget https://github.com/matswi/GarminConnect/raw/main/GarminConnect/GarminConnect.psm1
 
 # Use PowerShell as the default shell
 # Use array to avoid Docker prepending /bin/sh -c
