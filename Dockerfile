@@ -2,10 +2,10 @@
 # Using dotnet sdk, since the powershell image doesent support pi 4?
 FROM mcr.microsoft.com/dotnet/sdk:latest
 
-RUN \
-    TZ=Europe/Stockholm \
-    && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone \
-    && dpkg-reconfigure --frontend noninteractive tzdata
+#RUN \
+#    TZ=Europe/Stockholm \
+#    && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone \
+#    && dpkg-reconfigure --frontend noninteractive tzdata
 
 # get script from github
  RUN \
