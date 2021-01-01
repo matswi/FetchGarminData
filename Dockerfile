@@ -1,4 +1,4 @@
-FROM arm32v7/powershell:latest
+FROM mcr.microsoft.com/powershell:lts-arm32v7-ubuntu-18.04
 
 
 #RUN \
