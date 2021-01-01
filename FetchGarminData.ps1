@@ -9,7 +9,8 @@ $pswhVersion = $PSVersionTable.psversion.ToString()
 
 $config = Get-Content ./Configuration.json -Raw | ConvertFrom-Json
 
-$influxDbUri = $config.InfluxDbUri
+$influxUri = $config.InfluxUri
+$influxDb = $config.InfluxDb
 
 $password = $config.Password | ConvertTo-SecureString -AsPlainText -Force
 
@@ -37,7 +38,8 @@ while ($true) {
 
                 # Need to check if the result is already in the database
                 $dbQuery = "SELECT * FROM LightSleepSeconds WHERE time = $timeStamp"
-                $queryResult = (Invoke-RestMethod -Uri "$influxDbUri&q=$dbQuery").results.series
+                $dbQueryUri = $influxUri + "query?db=" + $influxDb + "&q=" + $dbQuery
+                $queryResult = (Invoke-RestMethod -Uri $dbQueryUri).results.series
 
                 if (-not $queryResult) {
 
@@ -55,8 +57,8 @@ while ($true) {
                     foreach ($metric in $sleep.Keys) {
                         
                         $value = $sleep.$metric
-
-                        $null = Invoke-RestMethod -Uri $influxDbUri -Method POST -Body "$metric,UserProfile=$userProfile value=$value $timeStamp"
+                        $dbWriteUri = $influxUri + "write?db=" + $influxDb
+                        $null = Invoke-RestMethod -Uri $dbWriteUri -Method POST -Body "$metric,UserProfile=$userProfile value=$value $timeStamp"
                     }
                 }
 
