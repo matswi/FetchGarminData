@@ -15,10 +15,10 @@ RUN \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-RUN \
-    TZ=Europe/Stockholm \
-    && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone \
-    && dpkg-reconfigure --frontend noninteractive tzdata
+#RUN \
+#    TZ=Europe/Stockholm \
+#    && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone \
+#    && dpkg-reconfigure --frontend noninteractive tzdata
 
 # get script from github
  RUN \
