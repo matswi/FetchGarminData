@@ -1,4 +1,4 @@
-$scriptVersion = "0.0.0.2"
+$scriptVersion = "0.0.0.3"
 
 Set-Location $PSScriptRoot
 
@@ -24,24 +24,27 @@ while ($true) {
     # Only run every second hour between 7AM and 10PM
     while ($hour -ge 7 -and $hour -le 22) {
 
-        $login = New-GarminConnectLogin -Credential $credential
+        [datetime]$today = Get-Date -Format yyyy-MM-dd
+        $unixTimeStamp = [long]((New-TimeSpan -Start (Get-Date -Date '1970-01-01') -End (($today).ToUniversalTime())).TotalSeconds * 1E9)
 
-        if ($login) {
+        # Need to check if the result is already in the database
+        $dbQuery = "SELECT * FROM LightSleepSeconds WHERE time = $unixTimeStamp"
+        $dbQueryUri = $influxUri + "query?db=" + $influxDb + "&q=" + $dbQuery
+        $queryResult = (Invoke-RestMethod -Uri $dbQueryUri).results.series
 
-            $sleepData = Get-GarminSleepData -UserDisplayName $config.DisplayName
+        if (-not $queryResult) {
 
-            if ($sleepData.dailySleepDTO.lightSleepSeconds -gt 0) {
-                
-                # Convert date to Unix timestamp with nanoseconds
-                [datetime]$date = $sleepData.dailySleepDTO.calendarDate
-                $timeStamp = [long]((New-TimeSpan -Start (Get-Date -Date '1970-01-01') -End (($Date).ToUniversalTime())).TotalSeconds * 1E9)
+            $login = New-GarminConnectLogin -Credential $credential
 
-                # Need to check if the result is already in the database
-                $dbQuery = "SELECT * FROM LightSleepSeconds WHERE time = $timeStamp"
-                $dbQueryUri = $influxUri + "query?db=" + $influxDb + "&q=" + $dbQuery
-                $queryResult = (Invoke-RestMethod -Uri $dbQueryUri).results.series
+            if ($login) {
 
-                if (-not $queryResult) {
+                $sleepData = Get-GarminSleepData -UserDisplayName $config.DisplayName
+
+                if ($sleepData.dailySleepDTO.lightSleepSeconds -gt 0) {
+                    
+                    # Convert date to Unix timestamp with nanoseconds
+                    [datetime]$date = $sleepData.dailySleepDTO.calendarDate
+                    $timeStamp = [long]((New-TimeSpan -Start (Get-Date -Date '1970-01-01') -End (($Date).ToUniversalTime())).TotalSeconds * 1E9)
 
                     $userProfile = $sleepData.dailySleepDTO.userProfilePK
 
@@ -60,12 +63,11 @@ while ($true) {
                         $dbWriteUri = $influxUri + "write?db=" + $influxDb
                         $null = Invoke-RestMethod -Uri $dbWriteUri -Method POST -Body "$metric,UserProfile=$userProfile value=$value $timeStamp"
                     }
-                }
-
-                else {
-                    Write-Output "Measurement with timestamp: $timeStamp $($sleepData.dailySleepDTO.calendarDate) already exist in the databas"
-                }
+                }                    
             }
+        }
+        else {
+            Write-Output "Measurement with timestamp: $timeStamp ($today) already exist in the databas"
         }
 
         Write-Output "`nChild loop time: $(Get-Date)"
