@@ -74,12 +74,12 @@ RUN chmod a+x,o-w ${PS_INSTALL_FOLDER}/pwsh \
  RUN \
     FETCHGARMINDATA_VERSION=0.0.0.1 \
 #    && mkdir -p /root/FetchGarminData \
-    && cd /root/FetchGarminData \
-    && wget https://github.com/matswi/FetchGarminData/raw/master/FetchGarminData.ps1 \
-    && && mkdir -p /root/FetchGarminData/GarminConnect \
-    && cd /root/FetchGarminData/GarminConnect \
-    && wget https://raw.githubusercontent.com/matswi/GarminConnect/main/GarminConnect/GarminConnect.psd1 \
-    && wget https://github.com/matswi/GarminConnect/raw/main/GarminConnect/GarminConnect.psm1
+    && cd /root/FetchGarminData 
+    # && wget https://github.com/matswi/FetchGarminData/raw/master/FetchGarminData.ps1 \
+    # && && mkdir -p /root/FetchGarminData/GarminConnect \
+    # && cd /root/FetchGarminData/GarminConnect \
+    # && wget https://raw.githubusercontent.com/matswi/GarminConnect/main/GarminConnect/GarminConnect.psd1 \
+    # && wget https://github.com/matswi/GarminConnect/raw/main/GarminConnect/GarminConnect.psm1
 
 # Use PowerShell as the default shell
 # Use array to avoid Docker prepending /bin/sh -c
