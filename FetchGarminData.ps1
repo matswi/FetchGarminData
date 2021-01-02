@@ -1,4 +1,4 @@
-$scriptVersion = "0.0.0.1"
+$scriptVersion = "0.0.0.2"
 
 Set-Location $PSScriptRoot
 
@@ -63,7 +63,7 @@ while ($true) {
                 }
 
                 else {
-                    Write-Output "Measurement already in the databas"
+                    Write-Output "Measurement with timestamp: $timeStamp $($sleepData.dailySleepDTO.calendarDate) already exist in the databas"
                 }
             }
         }
