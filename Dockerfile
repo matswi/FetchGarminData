@@ -17,14 +17,14 @@ RUN \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-# RUN \
-#    TZ=Europe/Stockholm \
-#    && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone \
-#    && dpkg-reconfigure --frontend noninteractive tzdata
+RUN \
+   TZ=Europe/Stockholm \
+   && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone \
+   && dpkg-reconfigure --frontend noninteractive tzdata
 
 # get script from github
  RUN \
-    FETCHGARMINDATA_VERSION=0.0.0.11 \
+    FETCHGARMINDATA_VERSION=0.0.0.12 \
     && mkdir -p /root/FetchGarminData \
     && cd /root/FetchGarminData \
     && wget https://github.com/matswi/FetchGarminData/raw/master/FetchGarminData.ps1 \
@@ -36,4 +36,4 @@ RUN \
 # Use PowerShell as the default shell
 # Use array to avoid Docker prepending /bin/sh -c
 ENTRYPOINT [ "pwsh" ]
-#CMD [ "/root/FetchGarminData/FetchGarminData.ps1" ]
+CMD [ "/root/FetchGarminData/FetchGarminData.ps1" ]
