@@ -72,7 +72,7 @@ RUN chmod a+x,o-w ${PS_INSTALL_FOLDER}/pwsh \
 
 # get script from github
  RUN \
-    FETCHGARMINDATA_VERSION=0.0.0.5 \
+    FETCHGARMINDATA_VERSION=0.0.0.6 \
     && mkdir -p /root/FetchGarminData \
     && cd /root/FetchGarminData \
     && wget https://github.com/matswi/FetchGarminData/raw/master/FetchGarminData.ps1
