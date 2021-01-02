@@ -11,5 +11,5 @@
 #
 # By default this script does nothing.
 
-su pi -c 'screen -dmS FetchGarminData sudo /home/pi/fetchgarmindata-init.sh'
+su pi -c 'screen -dmS FetchGarminData sudo /home/pi/FetchGarminData/fetchgarmindata-init.sh'
 exit 0
