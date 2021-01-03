@@ -79,7 +79,7 @@ RUN \
 
 # get script from github
  RUN \
-    FETCHGARMINDATA_VERSION=0.0.0.15 \
+    FETCHGARMINDATA_VERSION=0.0.0.16 \
     && mkdir -p /root/FetchGarminData \
     && cd /root/FetchGarminData \
     && wget https://github.com/matswi/FetchGarminData/raw/master/FetchGarminData.ps1 \
@@ -91,4 +91,4 @@ RUN \
 # Use PowerShell as the default shell
 # Use array to avoid Docker prepending /bin/sh -c
 ENTRYPOINT [ "pwsh" ]
-#CMD [ "/root/FetchGarminData/FetchGarminData.ps1" ]
+CMD [ "/root/FetchGarminData/FetchGarminData.ps1" ]
