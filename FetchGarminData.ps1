@@ -1,4 +1,4 @@
-$scriptVersion = "0.0.0.3"
+$scriptVersion = "0.0.0.4"
 
 Set-Location $PSScriptRoot
 
@@ -38,7 +38,7 @@ while ($true) {
 
             if ($login) {
 
-                $sleepData = Get-GarminSleepData -UserDisplayName $config.DisplayName
+                $sleepData = Get-GarminSleepData
 
                 if ($sleepData.dailySleepDTO.lightSleepSeconds -gt 0) {
                     
