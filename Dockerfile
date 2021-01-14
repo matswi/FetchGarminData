@@ -79,7 +79,7 @@ RUN \
 
 # get script from github
  RUN \
-    FETCHGARMINDATA_VERSION=0.0.0.16 \
+    FETCHGARMINDATA_VERSION=0.0.0.17 \
     && mkdir -p /root/FetchGarminData \
     && cd /root/FetchGarminData \
     && wget https://github.com/matswi/FetchGarminData/raw/master/FetchGarminData.ps1 \
