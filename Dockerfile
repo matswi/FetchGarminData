@@ -91,4 +91,4 @@ RUN \
 # Use PowerShell as the default shell
 # Use array to avoid Docker prepending /bin/sh -c
 ENTRYPOINT [ "pwsh" ]
-CMD [ "/root/FetchGarminData/FetchGarminData.ps1" ]
+#CMD [ "/root/FetchGarminData/FetchGarminData.ps1" ]
