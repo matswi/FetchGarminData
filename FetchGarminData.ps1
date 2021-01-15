@@ -1,4 +1,4 @@
-$scriptVersion = "0.0.0.4"
+$scriptVersion = "0.0.0.5"
 
 Set-Location $PSScriptRoot
 
@@ -55,6 +55,9 @@ while ($true) {
                         LightSleepSeconds = $sleepData.dailySleepDTO.lightSleepSeconds
                         REMSleepSeconds = $sleepData.dailySleepDTO.remSleepSeconds
                         AwakeSleepSeconds = $sleepData.dailySleepDTO.awakeSleepSeconds
+                        DeepSleepPercentage = ($sleepData.dailySleepDTO.deepSleepSeconds / $sleepData.dailySleepDTO.sleepTimeSeconds) * 100
+                        LightSleepPercentage = ($sleepData.dailySleepDTO.lightSleepSeconds / $sleepData.dailySleepDTO.sleepTimeSeconds) * 100
+                        REMSleepPercentage = ($sleepData.dailySleepDTO.remSleepSeconds / $sleepData.dailySleepDTO.sleepTimeSeconds) * 100
                     }
 
                     foreach ($metric in $sleep.Keys) {
