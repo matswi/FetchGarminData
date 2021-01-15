@@ -79,7 +79,7 @@ RUN chmod a+x,o-w ${PS_INSTALL_FOLDER}/pwsh \
 
 # get script from github
  RUN \
-    FETCHGARMINDATA_VERSION=0.0.0.20 \
+    FETCHGARMINDATA_VERSION=0.0.0.21 \
     && mkdir -p /root/FetchGarminData \
     && cd /root/FetchGarminData \
     && wget https://github.com/matswi/FetchGarminData/raw/master/FetchGarminData.ps1 \
@@ -91,4 +91,4 @@ RUN chmod a+x,o-w ${PS_INSTALL_FOLDER}/pwsh \
 # Use PowerShell as the default shell
 # Use array to avoid Docker prepending /bin/sh -c
 ENTRYPOINT [ "pwsh" ]
-#CMD [ "/root/FetchGarminData/FetchGarminData.ps1" ]
+CMD [ "/root/FetchGarminData/FetchGarminData.ps1" ]
